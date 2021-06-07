@@ -149,6 +149,12 @@ hooks = [
     'condition': 'checkout_mac',
     'action': ['python', 'src/build/mac_toolchain.py'],
   },
+  {
+    # Note: On Win, this should run after win_toolchain, as it may use it.
+    'name': 'clang',
+    'pattern': '.',
+    'action': ['python', 'src/tools/clang/scripts/update.py'],
+  },
   # Pull clang-format binaries using checked-in hashes.
   {
     'name': 'clang_format_win',
