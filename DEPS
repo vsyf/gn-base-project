@@ -59,6 +59,82 @@ deps = {
 }
 
 hooks = [
+  {                                                                                                 
+    # Ensure that the DEPS'd "depot_tools" has its self-update capability                           
+    # disabled.                                                                                     
+    'name': 'disable_depot_tools_selfupdate',                                                       
+    'pattern': '.',                                                                                 
+    'action': [                                                                                     
+        'python',                                                                                   
+        'src/third_party/depot_tools/update_depot_tools_toggle.py',                                 
+        '--disable',                                                                                
+    ],                                                                                              
+  },
+  {                                                                                                 
+    'name': 'sysroot_arm',                                                                          
+    'pattern': '.',                                                                                 
+    'condition': 'checkout_linux and checkout_arm',                                                 
+    'action': ['python', 'src/build/linux/sysroot_scripts/install-sysroot.py',                      
+               '--arch=arm'],                                                                       
+  },                                                                                                
+  {                                                                                                 
+    'name': 'sysroot_arm64',                                                                        
+    'pattern': '.',                                                                                 
+    'condition': 'checkout_linux and checkout_arm64',                                               
+    'action': ['python', 'src/build/linux/sysroot_scripts/install-sysroot.py',                      
+               '--arch=arm64'],                                                                     
+  },                                                                                                
+  {                                                                                                 
+    'name': 'sysroot_x86',                                                                          
+    'pattern': '.',                                                                                 
+    'condition': 'checkout_linux and (checkout_x86 or checkout_x64)',                               
+    # TODO(mbonadei): change to --arch=x86.                                                         
+    'action': ['python', 'src/build/linux/sysroot_scripts/install-sysroot.py',                      
+               '--arch=i386'],                                                                      
+  },
+  {                                                                                                 
+    'name': 'sysroot_mips',                                                                         
+    'pattern': '.',                                                                                 
+    'condition': 'checkout_linux and checkout_mips',                                                
+    # TODO(mbonadei): change to --arch=mips.                                                        
+    'action': ['python', 'src/build/linux/sysroot_scripts/install-sysroot.py',                      
+               '--arch=mipsel'],                                                                    
+  },                                                                                                
+  {                                                                                                 
+    'name': 'sysroot_x64',                                                                          
+    'pattern': '.',                                                                                 
+    'condition': 'checkout_linux and checkout_x64',                                                 
+    # TODO(mbonadei): change to --arch=x64.                                                         
+    'action': ['python', 'src/build/linux/sysroot_scripts/install-sysroot.py',                      
+               '--arch=amd64'],                                                                     
+  },                                                                                                
+  {                                                                                                 
+    # Case-insensitivity for the Win SDK. Must run before win_toolchain below.                      
+    'name': 'ciopfs_linux',                                                                         
+    'pattern': '.',                                                                                 
+    'condition': 'checkout_win and host_os == "linux"',                                             
+    'action': [ 'python',                                                                           
+                'src/third_party/depot_tools/download_from_google_storage.py',                      
+                '--no_resume',                                                                      
+                '--no_auth',                                                                        
+                '--bucket', 'chromium-browser-clang/ciopfs',                                        
+                '-s', 'src/build/ciopfs.sha1',                                                      
+    ]                                                                                               
+  },                                                                                                
+  {                                                                                                 
+    # Update the Windows toolchain if necessary. Must run before 'clang' below.                     
+    'name': 'win_toolchain',                                                                        
+    'pattern': '.',                                                                                 
+    'condition': 'checkout_win',                                                                    
+    'action': ['python', 'src/build/vs_toolchain.py', 'update', '--force'],                         
+  },                                                                                                
+  {                                                                                                 
+    # Update the Mac toolchain if necessary.                                                        
+    'name': 'mac_toolchain',                                                                        
+    'pattern': '.',                                                                                 
+    'condition': 'checkout_mac',                                                                    
+    'action': ['python', 'src/build/mac_toolchain.py'],                                             
+  },
   # Pull clang-format binaries using checked-in hashes.                                             
   {                                                                                                 
     'name': 'clang_format_win',                                                                     
