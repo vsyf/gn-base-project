@@ -1,10 +1,10 @@
 # dependencies file
 
 gclient_gn_args_file = 'src/build/config/gclient_args.gni'                                          
-                                                                                                    
-vars = {                                                                                            
-  # By default, we should check out everything needed to run on the main                            
-  # chromium waterfalls. More info at: crbug.com/570091.                                            
+
+vars = {
+  # By default, we should check out everything needed to run on the main
+  # chromium waterfalls. More info at: crbug.com/570091.
   'checkout_configuration': 'default',                                                              
   'checkout_instrumented_libraries': 'checkout_linux and checkout_configuration == "default"',      
   'chromium_revision': '4559b6b576fc5bd8f36ad7cde13bcf5215bec9dc',                                  
@@ -56,6 +56,20 @@ deps = {
     'https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libunwind.git@d999d54f4bca789543a2eb6c995af2d9b5a1f3ed',
   'src/third_party/depot_tools':                                                                    
     'https://chromium.googlesource.com/chromium/tools/depot_tools.git@dc7b108da629de39f923d510fc76ea2f58efa521',
+  'src/tools/clang/dsymutil': {                                                                     
+    'packages': [                                                                                   
+      {                                                                                             
+        'package': 'chromium/llvm-build-tools/dsymutil',                                            
+        'version': 'M56jPzDv1620Rnm__jTMYS62Zi8rxHVq7yw0qeBFEgkC',                                  
+      }                                                                                             
+    ],                                                                                              
+    'condition': 'checkout_mac',                                                                    
+    'dep_type': 'cipd',                                                                             
+  },
+  'src/tools':                                                                                      
+    'https://chromium.googlesource.com/chromium/src/tools@2a1184f6a084142fedae1f0b9e44ae1ec4431fc3',    
+  'src/tools/swarming_client':                                                                      
+    'https://chromium.googlesource.com/infra/luci/client-py.git@d46ea7635f2911208268170512cb611412488fd8',
 }
 
 hooks = [

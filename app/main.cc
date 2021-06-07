@@ -5,9 +5,9 @@
  * Distributed under terms of the GPLv2 license.
  */
 
-#include "hello.h"
+#include "../lib/hello.h"
 
 int main() {
   printHello();
-  return;
+  return 0;
 }
