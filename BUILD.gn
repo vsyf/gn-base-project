@@ -1,0 +1,7 @@
+group("default") {
+  testonly = true
+  deps = [
+    "//app:test",
+    "//lib:hello",
+  ]
+}
