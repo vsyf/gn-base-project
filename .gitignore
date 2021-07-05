@@ -39,7 +39,6 @@
 .settings
 .sw?
 /Makefile
-/base
 /build
 /buildtools
 /ios
